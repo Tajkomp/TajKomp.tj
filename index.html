@@ -1025,22 +1025,41 @@
     async function sendPremOrder() {
         const msg = `👑 ЗАЯВКА НА PREMIUM\n👤 Имя: ${currentUser.name}\n📞 Тел: ${currentUser.phone}\n💰 Сумма: 19.99 TJS\nСтатус: Оплатил`;
         
+        // Показываем лоадер или меняем текст кнопки, чтобы пользователь видел процесс
+        const confirmBtn = document.getElementById('prem-confirm-btn');
+        confirmBtn.innerText = "ОТПРАВКА...";
+        confirmBtn.disabled = true;
+
         try {
-            // Отправка фото чека в ТГ
+            // Преобразуем Base64 в Blob, чтобы Telegram принял файл корректно
+            const fetchRes = await fetch(premReceiptBase64);
+            const blob = await fetchRes.blob();
+            
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('photo', blob, 'receipt.jpg');
+            formData.append('caption', msg);
+
             const response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({chat_id: chatId, photo: premReceiptBase64, caption: msg})
+                body: formData
             });
 
             if(response.ok) {
                 document.getElementById('prem-pay-modal').style.display = 'none';
                 document.getElementById('prem-success-overlay').style.display = 'flex';
             } else {
-                alert("Ошибка отправки! Попробуйте еще раз.");
+                const errorData = await response.json();
+                console.error("Ошибка TG:", errorData);
+                alert("Ошибка API Telegram. Возможно, фото слишком большое.");
+                confirmBtn.innerText = "ПОДТВЕРДИТЬ И ОТПРАВИТЬ";
+                confirmBtn.disabled = false;
             }
         } catch(e) {
-            alert("Ошибка сети!");
+            console.error("Ошибка сети:", e);
+            alert("Ошибка сети! Проверьте интернет соединение.");
+            confirmBtn.innerText = "ПОДТВЕРДИТЬ И ОТПРАВИТЬ";
+            confirmBtn.disabled = false;
         }
     }
 
