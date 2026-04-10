@@ -1339,8 +1339,20 @@
             const inCart = cart.find(x => x.id == p.id);
             const qty = inCart ? inCart.qty : 0;
             const isFav = favorites.includes(p.id);
-            let displayPrice = p.price;
-            if(isPremium) displayPrice = Math.round(p.price * 0.9);
+            
+            let priceHtml = '';
+            if(isPremium) {
+                const premiumPrice = Math.round(p.price * 0.9);
+                priceHtml = `
+                    <span class="price-new">${premiumPrice} с.</span>
+                    <span class="price-old">${p.price} с.</span>
+                `;
+            } else {
+                priceHtml = `
+                    <span class="price-new">${p.price} с.</span>
+                    ${p.oldPrice ? `<span class="price-old">${p.oldPrice} с.</span>` : ''}
+                `;
+            }
 
             return `
             <div class="product-card" onclick="openP(${p.id})">
@@ -1357,8 +1369,7 @@
                 <div class="p-info">
                     <h3>${p.name}</h3>
                     <div class="price-box">
-                        <span class="price-new">${displayPrice} с.</span>
-                        ${(p.oldPrice || isPremium) ? `<span class="price-old">${p.price} с.</span>` : ''}
+                        ${priceHtml}
                     </div>
                     ${qty > 0 ? 
                         `<button class="btn-buy btn-added" onclick="event.stopPropagation()">Добавлено</button>
@@ -1411,11 +1422,20 @@
     function openP(id) {
         const p = products.find(x => x.id == id);
         const isPremium = currentUser && currentUser.premium;
-        let dPrice = isPremium ? Math.round(p.price * 0.9) : p.price;
+        
+        let dPrice, oldPHtml = '';
+        if(isPremium) {
+            dPrice = Math.round(p.price * 0.9);
+            oldPHtml = p.price + " смн";
+        } else {
+            dPrice = p.price;
+            oldPHtml = p.oldPrice ? p.oldPrice + " смн" : "";
+        }
+
         document.getElementById('m-gallery').innerHTML = (p.imgs || []).map(s => `<img src="${s}" style="height:250px; border-radius:15px; border: 1px solid rgba(0,122,255,0.1);">`).join('');
         document.getElementById('m-title').innerText = p.name;
         document.getElementById('m-price').innerText = dPrice + " смн";
-        document.getElementById('m-old-price').innerText = (p.oldPrice || isPremium) ? p.price + " смн" : "";
+        document.getElementById('m-old-price').innerText = oldPHtml;
         document.getElementById('m-desc').innerText = p.desc || "Характеристики обновляются...";
         document.getElementById('m-buy-btn').onclick = () => { buy(p.id); document.getElementById('product-overlay').style.display='none'; };
         document.getElementById('product-overlay').style.display = 'flex';
