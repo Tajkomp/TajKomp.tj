@@ -597,6 +597,66 @@
             display: flex;
             flex-direction: column;
             height: 70vh;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .chat-container {
+                flex-direction: row;
+            }
+        }
+
+        .chat-conversations {
+            width: 100%;
+            max-width: 250px;
+            overflow-y: auto;
+            background: var(--light);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        @media (max-width: 767px) {
+            .chat-conversations {
+                max-width: 100%;
+                max-height: 150px;
+            }
+        }
+
+        .conversation-item {
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+
+        .conversation-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .conversation-item.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .conversation-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .conversation-preview {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .conversation-item.active .conversation-preview {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .chat-messages-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .chat-messages {
@@ -605,7 +665,7 @@
             padding: 15px;
             background: var(--light);
             border-radius: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .message {
@@ -624,6 +684,15 @@
         .message.received {
             background: var(--white);
             color: var(--dark);
+        }
+
+        .message-text {
+            margin-bottom: 4px;
+        }
+
+        .message-time {
+            font-size: 10px;
+            opacity: 0.7;
         }
 
         .chat-input-container {
@@ -1135,14 +1204,19 @@
         <div class="page" id="chatPage">
             <h2 style="margin-bottom: 20px; color: var(--dark);">Чат</h2>
             <div class="chat-container">
-                <div class="chat-messages" id="chatMessages">
-                    <!-- Chat messages will be loaded here -->
+                <div class="chat-conversations" id="chatConversations">
+                    <!-- Conversations list will be loaded here -->
                 </div>
-                <div class="chat-input-container">
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Введите сообщение...">
-                    <button class="chat-send-btn" onclick="sendMessage()">
-                        <i data-lucide="send"></i>
-                    </button>
+                <div class="chat-messages-area">
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Chat messages will be loaded here -->
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Введите сообщение...">
+                        <button class="chat-send-btn" onclick="sendMessage()">
+                            <i data-lucide="send"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1160,7 +1234,7 @@
             <div class="admin-tabs">
                 <button class="admin-tab active" onclick="showAdminTab('products')">Товары</button>
                 <button class="admin-tab" onclick="showAdminTab('catalogs')">Каталоги</button>
-                <button class="admin-tab" onclick="showAdminTab('clients')">Клиенты</button>
+                <button class="admin-tab" id="clientsTab" onclick="showAdminTab('clients')">Клиенты</button>
                 <button class="admin-tab" onclick="showAdminTab('settings')">Настройки</button>
             </div>
             <div class="admin-section active" id="adminProducts">
@@ -1605,28 +1679,46 @@
                 return;
             }
 
-            grid.innerHTML = productsToRender.map(product => `
-                <div class="product-card ${product.sale ? 'sale' : ''}" onclick="openProductModal('${product.id}')">
-                    ${product.sale ? '<span class="sale-badge">Акция</span>' : ''}
-                    <img src="${product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/300x200?text=Product'}" alt="${product.name}" class="product-image">
-                    <div class="product-info">
-                        <h3 class="product-name">${product.name}</h3>
-                        <div class="product-price">
-                            <span class="current-price">${product.price} с.</span>
-                            ${product.oldPrice ? `<span clas="old-price">${product.oldPrice} с.</span>` : ''}
+            let html = '';
+            productsToRender.forEach((product, index) => {
+                // Add ad banner after every 10th product
+                if (index > 0 && index % 10 === 0 && bannerSlides.length > 0) {
+                    const currentSlide = bannerSlides[Math.floor(Math.random() * bannerSlides.length)];
+                    html += `
+                        <div class="ad-banner" style="grid-column: 1/-1; margin: 10px 0; background: linear-gradient(135deg, var(--accent) 0%, #f97316 100%); border-radius: 15px; padding: 15px; text-align: center; color: white; cursor: pointer;" onclick="window.open('https://t.me/horizonmarket', '_blank')">
+                            ${currentSlide.type === 'image' ? 
+                                `<img src="${currentSlide.content}" style="max-width: 100%; max-height: 150px; border-radius: 10px; object-fit: cover;">` :
+                                `<div style="font-size: 16px; font-weight: bold;">${currentSlide.content}</div>`
+                            }
                         </div>
-                        <div class="product-actions">
-                            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${product.id}')">
-                                <i data-lucide="shopping-cart" style="width: 16px;"></i>
-                                В корзину
-                            </button>
-                            <button class="favorite-btn ${favorites.includes(product.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${product.id}')">
-                                <i data-lucide="heart" style="width: 16px;"></i>
-                            </button>
+                    `;
+                }
+
+                html += `
+                    <div class="product-card ${product.sale ? 'sale' : ''}" onclick="openProductModal('${product.id}')">
+                        ${product.sale ? '<span class="sale-badge">Акция</span>' : ''}
+                        <img src="${product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/300x200?text=Product'}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-name">${product.name}</h3>
+                            <div class="product-price">
+                                <span class="current-price">${product.price} с.</span>
+                                ${product.oldPrice ? `<span clas="old-price">${product.oldPrice} с.</span>` : ''}
+                            </div>
+                            <div class="product-actions">
+                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${product.id}')">
+                                    <i data-lucide="shopping-cart" style="width: 16px;"></i>
+                                    В корзину
+                                </button>
+                                <button class="favorite-btn ${favorites.includes(product.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${product.id}')">
+                                    <i data-lucide="heart" style="width: 16px;"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            });
+
+            grid.innerHTML = html;
             lucide.createIcons();
         }
 
@@ -1672,10 +1764,12 @@
                     <i data-lucide="shopping-cart" style="display: inline; width: 16px; margin-right: 5px;"></i>
                     В корзину
                 </button>
-                <button class="btn btn-secondary" onclick="openChatWithSeller('${product.sellerId}')">
-                    <i data-lucide="message-circle" style="display: inline; width: 16px; margin-right: 5px;"></i>
-                    Связаться с продавцом
-                </button>
+                ${product.sellerId && product.sellerId !== currentUser?.id ? `
+                    <button class="btn btn-secondary" onclick="openChatWithSeller('${product.sellerId}', '${product.name}')">
+                        <i data-lucide="message-circle" style="display: inline; width: 16px; margin-right: 5px;"></i>
+                        Связаться с продавцом
+                    </button>
+                ` : ''}
             `;
 
             modal.classList.add('active');
@@ -1927,11 +2021,27 @@ ${sellerItems.map(item => `- ${item.name} x${item.qty} = ${item.price * item.qty
         }
 
         async function getAdminBotToken() {
-            return localStorage.getItem('adminBotToken') || '';
+            try {
+                const settingsDoc = await db.collection('settings').doc('telegram').get();
+                if (settingsDoc.exists) {
+                    return settingsDoc.data().adminBotToken || '';
+                }
+            } catch (error) {
+                console.error('Error getting admin bot token:', error);
+            }
+            return '';
         }
 
-        function getAdminChatId() {
-            return localStorage.getItem('adminChatId') || '';
+        async function getAdminChatId() {
+            try {
+                const settingsDoc = await db.collection('settings').doc('telegram').get();
+                if (settingsDoc.exists) {
+                    return settingsDoc.data().adminChatId || '';
+                }
+            } catch (error) {
+                console.error('Error getting admin chat ID:', error);
+            }
+            return '';
         }
 
         async function getSellerBotToken(sellerId) {
@@ -1948,7 +2058,7 @@ ${sellerItems.map(item => `- ${item.name} x${item.qty} = ${item.price * item.qty
 
         async function sendToTelegram(botToken, message, chatId = null) {
             try {
-                const targetChatId = chatId || getAdminChatId();
+                const targetChatId = chatId || await getAdminChatId();
                 if (!targetChatId) {
                     console.error('No chat ID configured');
                     return;
@@ -2027,14 +2137,15 @@ ${sellerItems.map(item => `- ${item.name} x${item.qty} = ${item.price * item.qty
         }
 
         // Chat Functions
-        function openChatWithSeller(sellerId) {
+        function openChatWithSeller(sellerId, productName = '') {
             currentChatSeller = sellerId;
             showPage('chat');
-            loadChatMessages();
+            loadChatMessages(productName);
         }
 
-        async function loadChatMessages() {
+        async function loadChatMessages(productName = '') {
             const container = document.getElementById('chatMessages');
+            const conversationsList = document.getElementById('chatConversations');
             
             if (!currentUser) {
                 container.innerHTML = `
@@ -2048,57 +2159,116 @@ ${sellerItems.map(item => `- ${item.name} x${item.qty} = ${item.price * item.qty
             }
 
             try {
-                const messagesSnapshot = await db.collection('chats')
+                // Load conversations list
+                const chatsSnapshot = await db.collection('chats')
                     .where('participants', 'array-contains', currentUser.id)
-                    .orderBy('createdAt', 'asc')
                     .get();
 
-                const messages = messagesSnapshot.docs.map(doc => doc.data());
-                
-                if (messages.length === 0) {
+                const conversations = [];
+                chatsSnapshot.forEach(doc => {
+                    const chat = doc.data();
+                    const otherUserId = chat.participants.find(id => id !== currentUser.id);
+                    if (otherUserId) {
+                        conversations.push({
+                            id: doc.id,
+                            otherUserId: otherUserId,
+                            lastMessage: chat.lastMessage || '',
+                            lastMessageTime: chat.lastMessageTime || ''
+                        });
+                    }
+                });
+
+                // Render conversations list
+                if (conversations.length > 0) {
+                    conversationsList.innerHTML = conversations.map(conv => `
+                        <div class="conversation-item ${currentChatSeller === conv.otherUserId ? 'active' : ''}" onclick="openChatWithSeller('${conv.otherUserId}')">
+                            <div class="conversation-name">Пользователь ${conv.otherUserId.slice(-6)}</div>
+                            <div class="conversation-preview">${conv.lastMessage.slice(0, 30)}...</div>
+                        </div>
+                    `).join('');
+                } else {
+                    conversationsList.innerHTML = '<div class="empty-state" style="padding: 10px;">Нет диалогов</div>';
+                }
+
+                // Load messages for current conversation
+                if (currentChatSeller) {
+                    const messagesSnapshot = await db.collection('chats')
+                        .where('participants', 'array-contains', currentUser.id)
+                        .where('participants', 'array-contains', currentChatSeller)
+                        .orderBy('createdAt', 'asc')
+                        .get();
+
+                    const messages = messagesSnapshot.docs.map(doc => doc.data());
+                    
+                    if (messages.length === 0 && productName) {
+                        // Send initial message about product
+                        await sendChatMessage(`Интересует товар: ${productName}`);
+                        loadChatMessages();
+                        return;
+                    }
+
+                    if (messages.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <i data-lucide="message-circle"></i>
+                                <p>Начните диалог</p>
+                            </div>
+                        `;
+                        lucide.createIcons();
+                        return;
+                    }
+
+                    container.innerHTML = messages.map(msg => `
+                        <div class="message ${msg.senderId === currentUser.id ? 'sent' : 'received'}">
+                            <div class="message-text">${msg.text}</div>
+                            <div class="message-time">${new Date(msg.createdAt).toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'})}</div>
+                        </div>
+                    `).join('');
+                    
+                    container.scrollTop = container.scrollHeight;
+                } else {
                     container.innerHTML = `
                         <div class="empty-state">
                             <i data-lucide="message-circle"></i>
-                            <p>Нет сообщений</p>
+                            <p>Выберите диалог для начала общения</p>
                         </div>
                     `;
                     lucide.createIcons();
-                    return;
                 }
-
-                container.innerHTML = messages.map(msg => `
-                    <div class="message ${msg.senderId === currentUser.id ? 'sent' : 'received'}">
-                        ${msg.text}
-                    </div>
-                `).join('');
-                
-                container.scrollTop = container.scrollHeight;
             } catch (error) {
                 console.error('Error loading messages:', error);
                 container.innerHTML = '<p class="empty-state">Ошибка загрузки сообщений</p>';
             }
         }
 
-        async function sendMessage() {
+        async function sendChatMessage(text = null) {
             const input = document.getElementById('chatInput');
-            const text = input.value.trim();
+            const message = text || input.value.trim();
             
-            if (!text || !currentUser) return;
+            if (!message || !currentChatSeller) return;
 
             try {
-                await db.collection('chats').add({
+                const chatData = {
                     participants: [currentUser.id, currentChatSeller],
                     senderId: currentUser.id,
-                    text: text,
-                    createdAt: new Date().toISOString()
-                });
+                    text: message,
+                    createdAt: new Date().toISOString(),
+                    lastMessage: message,
+                    lastMessageTime: new Date().toISOString()
+                };
+
+                await db.collection('chats').add(chatData);
                 
-                input.value = '';
+                if (!text) input.value = '';
                 loadChatMessages();
             } catch (error) {
                 console.error('Error sending message:', error);
                 showToast('Ошибка отправки сообщения');
             }
+        }
+
+        async function sendMessage() {
+            sendChatMessage();
         }
 
         // Profile Functions
@@ -2359,6 +2529,18 @@ ${sellerItems.map(item => `- ${item.name} x${item.qty} = ${item.price * item.qty
             if (tab === 'settings') loadAdminSettings();
         }
 
+        function updateUIForUser() {
+            const clientsTab = document.getElementById('clientsTab');
+            if (clientsTab) {
+                // Only show clients tab for main admin
+                if (!isAdmin) {
+                    clientsTab.style.display = 'none';
+                } else {
+                    clientsTab.style.display = 'block';
+                }
+            }
+        }
+
         async function loadAdminProducts() {
             const container = document.getElementById('adminProducts');
             container.innerHTML = `
@@ -2437,8 +2619,22 @@ ${sellerItems.map(item => `- ${item.name} x${item.qty} = ${item.price * item.qty
             }
         }
 
-        function loadAdminSettings() {
+        async function loadAdminSettings() {
             const container = document.getElementById('adminSettings');
+            
+            // Load bot settings from Firebase
+            let adminBotToken = '';
+            let adminChatId = '';
+            try {
+                const settingsDoc = await db.collection('settings').doc('telegram').get();
+                if (settingsDoc.exists) {
+                    adminBotToken = settingsDoc.data().adminBotToken || '';
+                    adminChatId = settingsDoc.data().adminChatId || '';
+                }
+            } catch (error) {
+                console.error('Error loading bot settings:', error);
+            }
+
             container.innerHTML = `
                 <div class="form-group">
                     <label class="form-label">Логин администратора</label>
@@ -2453,11 +2649,11 @@ ${sellerItems.map(item => `- ${item.name} x${item.qty} = ${item.price * item.qty
                 <h3 style="margin: 30px 0 15px;">Настройки Telegram бота администратора</h3>
                 <div class="form-group">
                     <label class="form-label">Токен бота</label>
-                    <input type="text" class="form-input" id="adminBotToken" placeholder="Введите токен вашего Telegram бота" value="${localStorage.getItem('adminBotToken') || ''}">
+                    <input type="text" class="form-input" id="adminBotToken" placeholder="Введите токен вашего Telegram бота" value="${adminBotToken}">
                 </div>
                 <div class="form-group">
                     <label class="form-label">ID чата</label>
-                    <input type="text" class="form-input" id="adminChatId" placeholder="Введите ID вашего чата в Telegram" value="${localStorage.getItem('adminChatId') || ''}">
+                    <input type="text" class="form-input" id="adminChatId" placeholder="Введите ID вашего чата в Telegram" value="${adminChatId}">
                 </div>
                 <p style="font-size: 12px; color: var(--gray); margin-bottom: 15px;">
                     Для получения токена создайте бота через @BotFather в Telegram. ID чата можно узнать через бота @userinfobot
@@ -2557,14 +2753,20 @@ ${sellerItems.map(item => `- ${item.name} x${item.qty} = ${item.price * item.qty
             }
         }
 
-        function saveAdminBotSettings() {
+        async function saveAdminBotSettings() {
             const botToken = document.getElementById('adminBotToken').value;
             const chatId = document.getElementById('adminChatId').value;
             
-            localStorage.setItem('adminBotToken', botToken);
-            localStorage.setItem('adminChatId', chatId);
-            
-            showToast('Настройки бота сохранены!');
+            try {
+                await db.collection('settings').doc('telegram').set({
+                    adminBotToken: botToken,
+                    adminChatId: chatId
+                });
+                showToast('Настройки бота сохранены!');
+            } catch (error) {
+                console.error('Error saving bot settings:', error);
+                showToast('Ошибка сохранения настроек');
+            }
         }
 
         // Product Form Modal
