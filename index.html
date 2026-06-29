@@ -440,14 +440,44 @@ body {
   transition: border-color var(--transition);
 }
 .chat-list-item:hover { border-color: var(--primary); }
+.chat-list-item.unread { border-color: var(--primary); }
 .chat-avatar {
   width: 46px; height: 46px; border-radius: 50%;
   background: linear-gradient(135deg, var(--primary), var(--accent2));
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px; color: #fff; flex-shrink: 0;
+  font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0;
 }
+.chat-list-row-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.chat-list-row-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 2px; }
 .chat-list-name { font-size: 14px; font-weight: 600; }
-.chat-list-preview { font-size: 12px; color: var(--text3); }
+.chat-list-item.unread .chat-list-name { font-weight: 800; color: var(--text); }
+.chat-list-time { font-size: 11px; color: var(--text3); flex-shrink: 0; }
+.chat-list-item.unread .chat-list-time { color: var(--primary-light); font-weight: 700; }
+.chat-list-preview {
+  font-size: 12px; color: var(--text3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0;
+}
+.chat-list-item.unread .chat-list-preview { color: var(--text2); font-weight: 600; }
+.chat-list-badge {
+  background: var(--primary); color: #fff; font-size: 11px; font-weight: 700;
+  min-width: 20px; height: 20px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; padding: 0 6px;
+}
+.msg-check { font-size: 11px; color: var(--text3); margin-right: 2px; }
+.msg-check.read { color: var(--primary-light); }
+.chat-date-divider { display: flex; justify-content: center; margin: 14px 0 6px; }
+.chat-date-divider span {
+  font-size: 11px; color: var(--text3); background: var(--card);
+  border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px;
+}
+#chatDialogView {
+  transform: translateX(24px); opacity: 0;
+  transition: transform 0.22s cubic-bezier(.4,0,.2,1), opacity 0.22s ease;
+}
+#chatDialogView.chat-slide-active { transform: translateX(0); opacity: 1; }
+.chat-messages { scroll-behavior: smooth; }
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages-empty { text-align: center; padding: 32px 16px; color: var(--text3); font-size: 13px; }
 .chat-messages {
   display: flex; flex-direction: column; gap: 8px;
   padding: 12px; max-height: 50vh; overflow-y: auto;
@@ -476,10 +506,13 @@ body {
 .chat-text-input:focus { border-color: var(--primary); }
 .chat-send-btn {
   background: var(--primary); color: #fff; border: none;
-  border-radius: 12px; width: 44px; height: 44px;
+  border-radius: 50%; width: 44px; height: 44px;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 18px;
+  cursor: pointer; font-size: 16px; flex-shrink: 0;
+  transition: background var(--transition), transform 0.1s;
 }
+.chat-send-btn:hover { background: var(--primary-light); }
+.chat-send-btn:active { transform: scale(0.92); }
 
 /* === PROFILE === */
 .profile-hero {
@@ -996,7 +1029,7 @@ body { padding-bottom: 60px; }
 </div>
 
 <!-- MAIN CONTENT -->
-<div class="main" style="padding-top: 4px">
+<div class="main" style="padding-top: 72px">
 
   <!-- HOME PAGE -->
   <div class="page active" id="pageHome">
@@ -1677,7 +1710,7 @@ window.closeModal = function(id) {
 
 window.openCart = function() { openModal('modalCart'); };
 
-function compressImage(dataUrl, maxW=800) {
+function compressImage(dataUrl, maxW=720) {
   return new Promise(res => {
     const img = new Image();
     img.onload = () => {
@@ -1686,7 +1719,7 @@ function compressImage(dataUrl, maxW=800) {
       if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      res(canvas.toDataURL('image/jpeg', 0.78));
+      res(canvas.toDataURL('image/jpeg', 0.72));
     };
     img.src = dataUrl;
   });
@@ -2218,23 +2251,22 @@ window.saveProduct = async function() {
 
     showToast('Сохранение...','info');
 
-    let images = [];
+    const uploadTasks = [];
     for (let i = 0; i < 4; i++) {
       const imgData = window.appState.editProductImages[i];
       if (imgData && imgData !== '') {
         if (imgData.startsWith('http')) {
-          images.push(imgData);
+          uploadTasks.push(Promise.resolve(imgData));
         } else if (imgData.startsWith('data:')) {
-          try {
-            const url = await uploadImage(imgData, `products/${u.uid}_${Date.now()}_${i}`);
-            if (url) images.push(url);
-          } catch(e) {
-            console.error('Ошибка загрузки фото:', e);
-            // Сохраняем без этой картинки, не прерываем
-          }
+          uploadTasks.push(
+            uploadImage(imgData, `products/${u.uid}_${Date.now()}_${i}`)
+              .catch(e => { console.error('Ошибка загрузки фото:', e); return null; })
+          );
         }
       }
     }
+    // Все фото загружаются параллельно — это значительно быстрее, чем по одному
+    const images = (await Promise.all(uploadTasks)).filter(Boolean);
 
     const editId = document.getElementById('editProductId').value;
     const productData = {
@@ -2665,6 +2697,33 @@ window.switchAdminTab = function(tabId, btn) {
 };
 
 // ===== CHAT =====
+function escapeHtml(str) {
+  return String(str==null?'':str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function chatInitial(name) {
+  const ch = (name||'').trim().charAt(0).toUpperCase();
+  return ch || '👤';
+}
+function formatChatTime(ts) {
+  const d = new Date(ts), now = new Date();
+  if (d.toDateString() === now.toDateString()) return d.toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'});
+  const yest = new Date(now); yest.setDate(now.getDate()-1);
+  if (d.toDateString() === yest.toDateString()) return 'Вчера';
+  return d.toLocaleDateString('ru',{day:'2-digit',month:'2-digit'});
+}
+function formatDateDivider(ts) {
+  const d = new Date(ts), now = new Date();
+  if (d.toDateString() === now.toDateString()) return 'Сегодня';
+  const yest = new Date(now); yest.setDate(now.getDate()-1);
+  if (d.toDateString() === yest.toDateString()) return 'Вчера';
+  return d.toLocaleDateString('ru',{day:'numeric',month:'long'});
+}
+function chatMembers(chatId, uid) {
+  return chatId.startsWith(uid+'_') || chatId.endsWith('_'+uid);
+}
+
 window.startChatWithSeller = function() {
   const p = window.appState.products[window.appState.currentProductId];
   if (!p) return;
@@ -2677,29 +2736,58 @@ window.startChatWithSeller = function() {
 };
 
 window.openChatDialog = function(sellerId, sellerName) {
-  document.getElementById('chatListView').style.display = 'none';
-  document.getElementById('chatDialogView').style.display = '';
+  const listEl = document.getElementById('chatListView');
+  const dialogEl = document.getElementById('chatDialogView');
   document.getElementById('chatDialogName').textContent = sellerName;
+  document.getElementById('chatDialogAvatar').textContent = chatInitial(sellerName);
   window.appState.currentChatSellerId = sellerId;
+
+  listEl.style.display = 'none';
+  dialogEl.style.display = '';
+  dialogEl.classList.remove('chat-slide-active');
+  requestAnimationFrame(()=> requestAnimationFrame(()=> dialogEl.classList.add('chat-slide-active')));
+
   const u = window.appState.currentUser;
   if (!u) return;
   const chatId = [u.uid, sellerId].sort().join('_');
+
+  // Отмечаем диалог прочитанным
+  set(ref(db, `chats/${chatId}/reads/${u.uid}`), Date.now());
+
+  if (window.appState.currentChatUnsub) { window.appState.currentChatUnsub(); }
   const messagesRef = ref(db, `chats/${chatId}/messages`);
-  onValue(messagesRef, snap => {
+  window.appState.currentChatUnsub = onValue(messagesRef, snap => {
     const msgs = snap.exists() ? Object.values(snap.val()) : [];
+    msgs.sort((a,b)=>a.ts-b.ts);
     const el = document.getElementById('chatMessages');
-    el.innerHTML = msgs.map(m=>`
-      <div style="display:flex;flex-direction:column;align-items:${m.from===u.uid?'flex-end':'flex-start'}">
-        <div class="msg-bubble ${m.from===u.uid?'me':'them'}">${m.text}</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px">${new Date(m.ts).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</div>
-      </div>`).join('');
+    if (!msgs.length) {
+      el.innerHTML = '<div class="chat-messages-empty">Нет сообщений. Напишите первым 👋</div>';
+      return;
+    }
+    let lastDivider = null, html = '';
+    msgs.forEach(m => {
+      const divider = formatDateDivider(m.ts);
+      if (divider !== lastDivider) { html += `<div class="chat-date-divider"><span>${divider}</span></div>`; lastDivider = divider; }
+      const mine = m.from === u.uid;
+      html += `<div style="display:flex;flex-direction:column;align-items:${mine?'flex-end':'flex-start'}">
+        <div class="msg-bubble ${mine?'me':'them'}">${escapeHtml(m.text)}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">${mine?'<span class=\"msg-check\">✓</span>':''}${new Date(m.ts).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</div>
+      </div>`;
+    });
+    el.innerHTML = html;
     el.scrollTop = el.scrollHeight;
+    // Каждое новое сообщение в открытом диалоге сразу считается прочитанным
+    set(ref(db, `chats/${chatId}/reads/${u.uid}`), Date.now());
   });
 };
 
 window.closeChatDialog = function() {
-  document.getElementById('chatListView').style.display = '';
-  document.getElementById('chatDialogView').style.display = 'none';
+  const listEl = document.getElementById('chatListView');
+  const dialogEl = document.getElementById('chatDialogView');
+  dialogEl.classList.remove('chat-slide-active');
+  listEl.style.display = '';
+  setTimeout(()=>{ dialogEl.style.display = 'none'; }, 220);
+  if (window.appState.currentChatUnsub) { window.appState.currentChatUnsub(); window.appState.currentChatUnsub = null; }
 };
 
 window.sendChatMsg = async function() {
@@ -2709,33 +2797,48 @@ window.sendChatMsg = async function() {
   const text = input.value.trim();
   if (!text) return;
   const chatId = [u.uid, window.appState.currentChatSellerId].sort().join('_');
-  await push(ref(db, `chats/${chatId}/messages`), { from: u.uid, text, ts: Date.now() });
   input.value = '';
+  await push(ref(db, `chats/${chatId}/messages`), { from: u.uid, text, ts: Date.now() });
 };
 
 function loadChats() {
   const u = window.appState.currentUser;
   if (!u) return;
   onValue(ref(db, 'chats'), snap => {
+    const el = document.getElementById('chatList');
     if (!snap.exists()) return;
     const chats = snap.val();
-    const myChats = Object.entries(chats).filter(([id])=>id.includes(u.uid));
-    const el = document.getElementById('chatList');
+    const myChats = Object.entries(chats).filter(([id])=> chatMembers(id, u.uid));
     if (!myChats.length) return;
-    el.innerHTML = myChats.map(([chatId, chat])=>{
+    const rows = myChats.map(([chatId, chat])=>{
       const msgs = chat.messages ? Object.values(chat.messages) : [];
+      msgs.sort((a,b)=>a.ts-b.ts);
       const last = msgs[msgs.length-1];
       const otherId = chatId.split('_').find(id=>id!==u.uid);
-      const otherProduct = Object.values(window.appState.products).find(p=>p.sellerId===otherId);
+      const otherProduct = Object.values(window.appState.products||{}).find(p=>p.sellerId===otherId);
       const otherName = otherProduct?.sellerName || 'Продавец';
-      return `<div class="chat-list-item" onclick="openChatDialog('${otherId}','${otherName}')">
-        <div class="chat-avatar">👤</div>
-        <div>
-          <div class="chat-list-name">${otherName}</div>
-          <div class="chat-list-preview">${last?.text||'Нет сообщений'}</div>
+      const myReadTs = (chat.reads && chat.reads[u.uid]) || 0;
+      const otherReadTs = (chat.reads && chat.reads[otherId]) || 0;
+      const unreadCount = msgs.filter(m=>m.from!==u.uid && m.ts>myReadTs).length;
+      const lastMine = last && last.from===u.uid;
+      const checkIcon = lastMine ? `<span class="msg-check ${last.ts<=otherReadTs?'read':''}">${last.ts<=otherReadTs?'✓✓':'✓'}</span>` : '';
+      return { chatId, otherId, otherName, last, unreadCount, checkIcon, lastTs: last ? last.ts : 0 };
+    });
+    rows.sort((a,b)=>b.lastTs-a.lastTs);
+    el.innerHTML = rows.map(r => `
+      <div class="chat-list-item ${r.unreadCount>0?'unread':''}" onclick="openChatDialog('${r.otherId}', ${escapeHtml(JSON.stringify(r.otherName))})">
+        <div class="chat-avatar">${chatInitial(r.otherName)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="chat-list-row-top">
+            <div class="chat-list-name">${escapeHtml(r.otherName)}</div>
+            <div class="chat-list-time">${r.last?formatChatTime(r.last.ts):''}</div>
+          </div>
+          <div class="chat-list-row-bottom">
+            <div class="chat-list-preview">${r.checkIcon}${r.last?escapeHtml(r.last.text):'Нет сообщений'}</div>
+            ${r.unreadCount>0?`<div class="chat-list-badge">${r.unreadCount>9?'9+':r.unreadCount}</div>`:''}
+          </div>
         </div>
-      </div>`;
-    }).join('');
+      </div>`).join('');
   });
 }
 
@@ -2780,7 +2883,7 @@ window.toggleCatalog = function() {
   document.getElementById('catalogDropdown').classList.toggle('open');
 };
 document.addEventListener('click', e => {
-  if (!e.target.closest('.catalog-btn') && !e.target.closest('.catalog-dropdown')) {
+  if (!e.target.closest('#navCatalogBtn') && !e.target.closest('.catalog-dropdown')) {
     document.getElementById('catalogDropdown').classList.remove('open');
   }
   if (!e.target.closest('.search-wrap') && !e.target.closest('.search-results-overlay')) {
