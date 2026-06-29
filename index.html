@@ -145,13 +145,12 @@ body {
 
 /* === BANNER === */
 .banner-wrap {
-  margin: 72px 16px 0;
-  max-width: 1200px; margin-left: auto; margin-right: auto;
-  padding-top: 72px;
+  max-width: 1200px; margin: 0 auto;
+  padding: 58px 12px 0;
 }
 .banner-slider {
-  border-radius: 20px; overflow: hidden;
-  position: relative; height: 180px;
+  border-radius: 16px; overflow: hidden;
+  position: relative; height: 160px;
   box-shadow: var(--shadow);
 }
 .banner-slide {
@@ -177,33 +176,7 @@ body {
 }
 .banner-dot.active { background: #fff; transform: scale(1.3); }
 
-/* === CATALOG DROPDOWN === */
-.catalog-dropdown {
-  position: fixed; top: 62px; left: 0; right: 0;
-  background: var(--glass); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  z-index: 99; display: none; padding: 16px;
-  max-height: 60vh; overflow-y: auto;
-}
-.catalog-dropdown.open { display: block; }
-.catalog-grid { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px; }
-.cat-item {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 12px; padding: 8px 14px;
-  cursor: pointer; font-size: 13px; font-weight: 500;
-  transition: all var(--transition); display: flex; align-items: center; gap: 6px;
-}
-.cat-item:hover { border-color: var(--primary); background: var(--card2); }
-.subcat-list {
-  width: 100%; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;
-  padding-left: 12px;
-}
-.subcat-item {
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; padding: 5px 10px; font-size: 12px;
-  cursor: pointer; transition: all var(--transition);
-}
-.subcat-item:hover { border-color: var(--primary); color: var(--primary); }
+/* === CATALOG - see modern styles below === */
 
 /* === MAIN === */
 .main { max-width: 1200px; margin: 0 auto; padding: 16px; }
@@ -312,30 +285,7 @@ body {
 .qty-btn:hover { background: var(--primary-light); }
 .qty-num { font-size: 14px; font-weight: 700; min-width: 24px; text-align: center; }
 
-/* === BOTTOM NAV === */
-.bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  background: var(--glass); backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
-  display: flex; align-items: center;
-  height: 64px;
-}
-.nav-item {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 3px; cursor: pointer; padding: 8px 4px;
-  color: var(--text3); transition: color var(--transition);
-  font-size: 10px; font-weight: 500; position: relative;
-}
-.nav-item.active { color: var(--primary); }
-.nav-item svg { width: 22px; height: 22px; }
-.nav-badge {
-  position: absolute; top: 6px; right: calc(50% - 16px);
-  background: var(--accent2); color: #fff;
-  font-size: 9px; font-weight: 700;
-  width: 15px; height: 15px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-}
+/* === BOTTOM NAV - defined below in responsive section === */
 
 /* === PAGES === */
 .page { display: none; }
@@ -689,7 +639,7 @@ body {
 
 /* === BOT CONSULTANT === */
 .bot-fab {
-  position: fixed; bottom: 80px; right: 16px; z-index: 150;
+  position: fixed; bottom: 68px; right: 16px; z-index: 150;
   width: 52px; height: 52px; border-radius: 50%;
   background: linear-gradient(135deg, var(--primary), var(--accent2));
   box-shadow: 0 4px 20px rgba(108,60,225,0.4);
@@ -708,14 +658,7 @@ body {
 }
 .search-results-overlay.open { display: block; }
 
-/* === DESKTOP FIXES === */
-@media(min-width: 768px) {
-  .banner-slider { height: 260px; }
-  .modal { max-width: 480px; }
-  .modal-overlay { align-items: center; }
-  .modal { border-radius: 20px; margin: 16px; }
-  .modal-handle { display: none; }
-}
+
 
 /* === PWA SPLASH === */
 .pwa-install-btn {
@@ -725,245 +668,261 @@ body {
   cursor: pointer; display: none;
 }
 
-/* ============================================================ */
-/* === FULLY RESPONSIVE - MOBILE / TABLET / DESKTOP === */
-/* ============================================================ */
 
-/* --- Base mobile-first resets --- */
-img, video { max-width: 100%; }
-button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+/* === ABOUT PAGE === */
+.about-hero {
+  text-align: center; padding: 32px 16px 20px;
+  background: linear-gradient(135deg, var(--primary), var(--accent2));
+  border-radius: 20px; margin-bottom: 20px; color: #fff;
+}
+.about-logo { font-size: 52px; line-height: 1; margin-bottom: 8px; }
+.about-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px; font-weight: 900; letter-spacing: 2px;
+}
+.about-tagline { font-size: 14px; opacity: 0.85; margin-top: 6px; }
+.about-desc {
+  background: var(--card); border-radius: 16px;
+  padding: 16px; font-size: 14px; line-height: 1.7;
+  color: var(--text2); margin-bottom: 20px;
+  border: 1.5px solid var(--border);
+}
+.about-social-title {
+  font-size: 13px; font-weight: 700; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+.about-socials {
+  display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;
+}
+.social-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px; border-radius: 14px;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  flex: 1; min-width: 140px; transition: all var(--transition);
+  border: none; cursor: pointer;
+}
+.social-btn.instagram {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: #fff;
+}
+.social-btn.telegram { background: #229ED9; color: #fff; }
+.social-btn.whatsapp { background: #25D366; color: #fff; }
+.social-btn:hover { transform: translateY(-2px); opacity: 0.92; box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+.about-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-top: 20px;
+}
+.about-stat {
+  background: var(--card); border-radius: 14px; padding: 16px 8px;
+  text-align: center; border: 1.5px solid var(--border);
+}
+.about-stat-num {
+  font-size: 26px; font-weight: 900;
+  background: linear-gradient(135deg, var(--primary-light), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.about-stat-label { font-size: 12px; color: var(--text3); margin-top: 4px; }
 
-/* --- HEADER responsive --- */
-@media (max-width: 400px) {
-  .logo { font-size: 14px; }
-  .catalog-btn span { display: none; }
-  .catalog-btn { padding: 8px 10px; font-size: 12px; }
-  .header { padding: 8px 10px; }
-  .search-input { font-size: 13px; padding: 8px 68px 8px 32px; }
-  .cart-btn, .theme-btn { width: 36px; height: 36px; }
-  .header-btns { gap: 4px; }
+/* === MODERN CATALOG === */
+.catalog-dropdown {
+  position: fixed; top: 62px; left: 0; right: 0;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  z-index: 99; display: none; padding: 0;
+  max-height: 80vh; overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.catalog-dropdown.open { display: block; }
+.catalog-search-bar {
+  padding: 12px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.catalog-search-input {
+  flex: 1; background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 8px 14px;
+  color: var(--text); font-size: 14px; outline: none;
+}
+.catalog-search-input:focus { border-color: var(--primary); }
+.catalog-close-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--text3); font-size: 20px; padding: 4px 8px;
+}
+.catalog-body { display: flex; min-height: 200px; }
+.catalog-cats-sidebar {
+  width: 120px; flex-shrink: 0;
+  background: var(--bg); border-right: 1px solid var(--border);
+  overflow-y: auto; padding: 8px 0;
+}
+.catalog-cat-tab {
+  padding: 12px 14px; cursor: pointer; font-size: 13px;
+  font-weight: 500; color: var(--text2); transition: all var(--transition);
+  border-left: 3px solid transparent; line-height: 1.3;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.catalog-cat-tab .cat-emoji { font-size: 22px; }
+.catalog-cat-tab.active {
+  color: var(--primary); background: var(--card2);
+  border-left-color: var(--primary);
+}
+.catalog-cat-tab:hover { color: var(--primary); background: var(--card); }
+.catalog-subcats-panel {
+  flex: 1; padding: 12px 14px; overflow-y: auto;
+}
+.catalog-subcats-panel h3 {
+  font-size: 15px; font-weight: 700; margin-bottom: 12px;
+  color: var(--text);
+}
+.subcat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.subcat-chip {
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 20px; padding: 7px 14px;
+  font-size: 13px; cursor: pointer; transition: all var(--transition);
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.subcat-chip:hover, .subcat-chip.active {
+  background: var(--primary); color: #fff;
+  border-color: var(--primary);
+}
+.catalog-all-btn {
+  width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff; border: none; border-radius: 12px;
+  padding: 11px; font-size: 14px; font-weight: 600;
+  cursor: pointer; margin-bottom: 12px; transition: opacity var(--transition);
+}
+.catalog-all-btn:hover { opacity: 0.9; }
+
+/* === BOTTOM NAV - 7 items responsive === */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: var(--glass); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex; align-items: stretch;
+  height: 60px; overflow: hidden;
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2px; cursor: pointer; padding: 6px 2px;
+  color: var(--text3); transition: color var(--transition);
+  font-size: 9px; font-weight: 500; position: relative;
+  min-width: 0;
+}
+.nav-item.active { color: var(--primary); }
+.nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+.nav-item span.label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; text-align: center; }
+.nav-badge {
+  position: absolute; top: 4px; left: 50%; transform: translateX(2px);
+  background: var(--accent2); color: #fff;
+  font-size: 8px; font-weight: 700;
+  min-width: 14px; height: 14px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 3px;
+}
+body { padding-bottom: 60px; }
+
+/* === PWA INSTALL BANNER === */
+.pwa-banner {
+  position: fixed; bottom: 64px; left: 12px; right: 12px; z-index: 150;
+  background: linear-gradient(135deg, var(--primary), var(--accent2));
+  border-radius: 16px; padding: 14px 16px;
+  display: none; align-items: center; gap: 12px;
+  box-shadow: 0 8px 32px rgba(108,60,225,0.4);
+  animation: slideUp 0.4s ease;
+}
+.pwa-banner.show { display: flex; }
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.pwa-banner-icon { font-size: 32px; flex-shrink: 0; }
+.pwa-banner-text { flex: 1; color: #fff; }
+.pwa-banner-title { font-size: 14px; font-weight: 700; }
+.pwa-banner-sub { font-size: 12px; opacity: 0.85; }
+.pwa-banner-btn {
+  background: #fff; color: var(--primary);
+  border: none; border-radius: 10px;
+  padding: 8px 14px; font-size: 13px; font-weight: 700;
+  cursor: pointer; white-space: nowrap;
+}
+.pwa-banner-close {
+  background: rgba(255,255,255,0.2); border: none;
+  border-radius: 8px; width: 28px; height: 28px;
+  color: #fff; cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
 }
 
-@media (max-width: 360px) {
-  .logo { font-size: 13px; }
-  .header-inner { gap: 6px; }
-  .catalog-btn { padding: 7px 8px; }
-  .cart-btn, .theme-btn { width: 34px; height: 34px; }
+/* === HEADER SLIM (no catalog/cart) === */
+.header { padding: 8px 14px; }
+.header-inner { gap: 8px; }
+.theme-btn {
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 10px; width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text); flex-shrink: 0;
+  transition: border-color var(--transition);
+}
+.pwa-install-btn {
+  background: linear-gradient(135deg, var(--primary), var(--accent2));
+  color: #fff; border: none; border-radius: 10px;
+  width: 38px; height: 38px; display: none;
+  align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer; flex-shrink: 0;
 }
 
-/* Tablet header */
-@media (min-width: 600px) and (max-width: 900px) {
-  .logo { font-size: 20px; }
-  .search-input { font-size: 15px; }
-  .catalog-btn { font-size: 14px; padding: 9px 16px; }
-}
-
-/* Desktop header */
-@media (min-width: 900px) {
-  .header { padding: 12px 24px; }
-  .header-inner { gap: 16px; }
-  .logo { font-size: 22px; }
-  .search-input { font-size: 15px; padding: 11px 90px 11px 42px; border-radius: 14px; }
-  .catalog-btn { font-size: 15px; padding: 10px 20px; border-radius: 12px; }
-  .cart-btn, .theme-btn { width: 46px; height: 46px; border-radius: 12px; }
-  .header-btns { gap: 10px; }
-}
-
-/* --- BANNER responsive --- */
-@media (max-width: 480px) {
-  .banner-wrap { padding-top: 64px; }
-  .banner-slider { height: 130px; border-radius: 14px; }
-  .banner-placeholder { font-size: 13px; }
-}
-@media (min-width: 600px) {
-  .banner-slider { height: 220px; }
-}
-@media (min-width: 900px) {
-  .banner-wrap { padding-top: 80px; }
-  .banner-slider { height: 300px; border-radius: 24px; }
-}
-@media (min-width: 1200px) {
-  .banner-slider { height: 360px; }
-}
-
-/* --- PRODUCTS GRID responsive --- */
-@media (max-width: 359px) {
+/* === RESPONSIVE OVERRIDES === */
+@media (max-width: 380px) {
+  .nav-item { font-size: 8px; padding: 5px 1px; }
+  .nav-item svg { width: 18px; height: 18px; }
+  .bottom-nav { height: 56px; }
+  body { padding-bottom: 56px; }
+  .banner-slider { height: 120px !important; border-radius: 12px; }
   .products-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
   .product-img-wrap { height: 130px; }
-  .product-name { font-size: 11px; }
-  .product-price { font-size: 13px; }
-  .add-cart-btn { font-size: 11px; padding: 7px; }
+  .about-socials { flex-direction: column; }
+  .social-btn { min-width: unset; }
 }
-@media (min-width: 360px) and (max-width: 479px) {
+@media (min-width: 381px) and (max-width: 480px) {
+  .banner-slider { height: 150px !important; }
   .products-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .product-img-wrap { height: 150px; }
 }
-@media (min-width: 480px) and (max-width: 599px) {
-  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .product-img-wrap { height: 160px; }
+@media (min-width: 481px) and (max-width: 767px) {
+  .banner-slider { height: 200px !important; }
+  .products-grid { grid-template-columns: repeat(3, 1fr); }
+  .nav-item { font-size: 10px; }
+  .nav-item svg { width: 22px; height: 22px; }
+  .bottom-nav { height: 64px; }
+  body { padding-bottom: 64px; }
 }
-@media (min-width: 600px) and (max-width: 899px) {
-  .products-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .product-img-wrap { height: 175px; }
+@media (min-width: 768px) and (max-width: 1023px) {
+  .banner-slider { height: 260px !important; }
+  .products-grid { grid-template-columns: repeat(3, 1fr); }
+  .bottom-nav { padding: 0 5%; height: 66px; }
+  .nav-item { font-size: 11px; }
+  .nav-item svg { width: 22px; height: 22px; }
+  body { padding-bottom: 66px; }
+  .catalog-cats-sidebar { width: 150px; }
 }
-@media (min-width: 900px) and (max-width: 1199px) {
-  .products-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .product-img-wrap { height: 190px; }
-  .product-name { font-size: 14px; }
-  .product-price { font-size: 17px; }
+@media (min-width: 1024px) {
+  .banner-slider { height: 320px !important; }
+  .products-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .bottom-nav { padding: 0 15%; height: 68px; }
+  .nav-item { font-size: 12px; }
+  .nav-item svg { width: 23px; height: 23px; }
+  body { padding-bottom: 68px; }
+  .catalog-dropdown { top: 60px; }
+  .catalog-cats-sidebar { width: 170px; }
+  .header { padding: 10px 24px; }
+  .pwa-banner { max-width: 500px; left: 50%; transform: translateX(-50%); }
 }
-@media (min-width: 1200px) {
-  .products-grid { grid-template-columns: repeat(5, 1fr); gap: 18px; }
-  .product-img-wrap { height: 200px; }
-  .product-name { font-size: 14px; }
-  .product-price { font-size: 17px; }
-  .add-cart-btn { font-size: 14px; padding: 11px; }
+@media (min-width: 1280px) {
+  .products-grid { grid-template-columns: repeat(5, 1fr); }
 }
-
-/* --- BOTTOM NAV responsive --- */
-@media (max-width: 360px) {
-  .bottom-nav { height: 58px; }
-  .nav-item { font-size: 9px; padding: 6px 2px; }
-  .nav-item svg { width: 20px; height: 20px; }
-}
-@media (min-width: 900px) {
-  /* On desktop show nav as sidebar or keep at bottom but wider */
-  .bottom-nav { 
-    height: 70px;
-    padding: 0 10%;
-  }
-  .nav-item { font-size: 12px; gap: 4px; }
-  .nav-item svg { width: 24px; height: 24px; }
-  body { padding-bottom: 90px; }
-}
-
-/* --- MAIN padding responsive --- */
-@media (max-width: 480px) {
-  .main { padding: 10px; }
-  .section-title { font-size: 17px; margin-bottom: 12px; }
-}
-@media (min-width: 900px) {
-  .main { padding: 24px; }
-  .section-title { font-size: 24px; }
-}
-
-/* --- MODALS responsive --- */
-@media (max-width: 480px) {
-  .modal { padding: 18px 14px; }
-  .modal-title { font-size: 17px; }
-  .form-input, .form-select { font-size: 16px; padding: 10px 12px; } /* 16px prevents iOS zoom */
-  .form-btn { font-size: 15px; padding: 13px; }
-}
-@media (min-width: 600px) {
-  .modal-overlay { align-items: center; }
-  .modal {
-    border-radius: 20px !important;
-    margin: 16px;
-    max-width: 480px;
-    transform: scale(0.95) !important;
-  }
-  .modal-overlay.open .modal { transform: scale(1) !important; }
-  .modal-handle { display: none; }
-}
-@media (min-width: 900px) {
-  .modal { max-width: 540px; padding: 32px 28px; }
-  .modal-title { font-size: 22px; }
-}
-
-/* --- CATALOG DROPDOWN responsive --- */
-@media (max-width: 480px) {
-  .catalog-dropdown { padding: 12px; top: 58px; }
-  .cat-item { font-size: 12px; padding: 7px 10px; }
-  .subcat-item { font-size: 11px; padding: 4px 8px; }
-}
-@media (min-width: 900px) {
-  .catalog-dropdown { padding: 20px 24px; }
-  .cat-item { font-size: 14px; padding: 10px 16px; }
-}
-
-/* --- CART responsive --- */
-@media (max-width: 480px) {
-  .cart-item { padding: 10px; gap: 10px; }
-  .cart-item-img { width: 60px; height: 60px; font-size: 22px; }
-  .cart-item-name { font-size: 12px; }
-  .cart-item-price { font-size: 13px; }
-}
-@media (min-width: 900px) {
-  .cart-item-img { width: 80px; height: 80px; }
-  .cart-item-name { font-size: 15px; }
-  .cart-item-price { font-size: 16px; }
-}
-
-/* --- PROFILE responsive --- */
-@media (max-width: 480px) {
-  .profile-hero { padding: 16px; }
-  .profile-name { font-size: 16px; }
-  .profile-menu-item { padding: 12px 14px; }
-}
-@media (min-width: 900px) {
-  .profile-hero { padding: 28px; }
-  .profile-avatar { width: 100px; height: 100px; font-size: 40px; }
-  .profile-name { font-size: 22px; }
-  .profile-menu-item { padding: 16px 20px; border-radius: 14px; }
-}
-
-/* --- CHAT responsive --- */
-@media (max-width: 480px) {
-  .chat-list-item { padding: 10px; }
-  .chat-avatar { width: 40px; height: 40px; font-size: 16px; }
-  .chat-list-name { font-size: 13px; }
-}
-@media (min-width: 900px) {
-  .chat-messages { max-height: 60vh; }
-  .msg-bubble { font-size: 14px; padding: 12px 16px; }
-}
-
-/* --- ADMIN responsive --- */
-@media (max-width: 480px) {
-  .admin-tabs { gap: 4px; }
-  .admin-tab { font-size: 12px; padding: 7px 10px; }
-  .user-card { padding: 10px; }
-}
-@media (min-width: 900px) {
-  .admin-tab { font-size: 14px; padding: 10px 18px; }
-}
-
-/* --- PRODUCT DETAIL responsive --- */
-@media (max-width: 480px) {
-  .product-detail-img { width: 220px; height: 170px; }
-  .product-detail-name { font-size: 17px; }
-  .product-detail-price { font-size: 22px; }
-}
-@media (min-width: 900px) {
-  .product-detail-img { width: 340px; height: 270px; }
-  .product-detail-name { font-size: 24px; }
-  .product-detail-price { font-size: 30px; }
-}
-
-/* --- TOAST responsive --- */
-@media (max-width: 480px) {
-  #toastContainer { bottom: 72px; left: 10px; right: 10px; }
-}
-@media (min-width: 900px) {
-  #toastContainer { bottom: 90px; right: 24px; left: auto; min-width: 280px; }
-}
-
-/* --- Touch targets: min 44px for all clickable elements on mobile --- */
-@media (max-width: 900px) {
-  .fav-btn { width: 36px; height: 36px; }
-  .qty-btn { width: 40px; height: 40px; }
-  .chat-send-btn { width: 48px; height: 48px; }
-  .modal-close { width: 40px; height: 40px; }
-}
-
-/* --- Prevent horizontal scroll --- */
-body, .main, .header, .bottom-nav {
-  overflow-x: hidden;
-  max-width: 100vw;
-}
-.header-inner { min-width: 0; }
-.search-wrap { min-width: 0; }
-.logo { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
 </style>
 </head>
@@ -971,6 +930,17 @@ body, .main, .header, .bottom-nav {
 
 <!-- TOAST CONTAINER -->
 <div class="toast-container" id="toastContainer"></div>
+
+<!-- PWA INSTALL BANNER -->
+<div class="pwa-banner" id="pwaBanner">
+  <div class="pwa-banner-icon">📲</div>
+  <div class="pwa-banner-text">
+    <div class="pwa-banner-title">Установить HORIZON MARKET</div>
+    <div class="pwa-banner-sub">Быстрый доступ с главного экрана</div>
+  </div>
+  <button class="pwa-banner-btn" onclick="installPWA()">Установить</button>
+  <button class="pwa-banner-close" onclick="document.getElementById('pwaBanner').classList.remove('show')">✕</button>
+</div>
 
 <!-- HEADER -->
 <header class="header">
@@ -988,26 +958,31 @@ body, .main, .header, .bottom-nav {
       <input type="file" accept="image/*" id="photoSearchInput" style="display:none" onchange="handlePhotoSearch(this)">
     </div>
     <div class="header-btns">
-      <button class="catalog-btn" onclick="toggleCatalog()">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-        Каталог
-      </button>
-      <button class="cart-btn" onclick="openCart()">
-        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <span class="cart-badge" id="cartBadge">0</span>
-      </button>
-      <button class="theme-btn" onclick="toggleTheme()">
+      <button class="theme-btn" onclick="toggleTheme()" title="Сменить тему">
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="themeIcon"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       </button>
-      <button class="pwa-install-btn" id="pwaInstallBtn" onclick="installPWA()">📲 Установить</button>
+      <button class="pwa-install-btn" id="pwaInstallBtn" onclick="installPWA()" title="Установить приложение">📲</button>
     </div>
   </div>
 </header>
 
-<!-- CATALOG DROPDOWN -->
+<!-- MODERN CATALOG DROPDOWN -->
 <div class="catalog-dropdown" id="catalogDropdown">
-  <div class="catalog-grid" id="catalogGrid">
-    <div style="color:var(--text3);font-size:13px">Загрузка каталога...</div>
+  <div class="catalog-search-bar">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" class="catalog-search-input" placeholder="Поиск по каталогу..." id="catalogSearchInput" oninput="filterCatalogSearch(this.value)">
+    <button class="catalog-close-btn" onclick="toggleCatalog()">✕</button>
+  </div>
+  <div class="catalog-body">
+    <div class="catalog-cats-sidebar" id="catalogSidebar">
+      <div style="padding:10px 14px;font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:1px">Разделы</div>
+    </div>
+    <div class="catalog-subcats-panel" id="catalogSubcats">
+      <button class="catalog-all-btn" onclick="filterByCatalog(null)">🛍️ Все товары</button>
+      <div class="subcat-chips" id="subcatChips">
+        <div style="color:var(--text3);font-size:13px">Загрузка...</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1021,7 +996,7 @@ body, .main, .header, .bottom-nav {
 </div>
 
 <!-- MAIN CONTENT -->
-<div class="main" style="padding-top: 8px">
+<div class="main" style="padding-top: 4px">
 
   <!-- HOME PAGE -->
   <div class="page active" id="pageHome">
@@ -1090,6 +1065,37 @@ body, .main, .header, .bottom-nav {
         <input type="text" class="chat-text-input" id="chatTextInput" placeholder="Написать сообщение..." onkeydown="if(event.key==='Enter')sendChatMsg()">
         <button class="chat-send-btn" onclick="sendChatMsg()">➤</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ABOUT PAGE -->
+  <div class="page" id="pageAbout">
+    <div class="about-hero">
+      <div class="about-logo">⬡</div>
+      <div class="about-brand">HORIZON MARKET</div>
+      <div class="about-tagline">Лучший маркетплейс для вас</div>
+    </div>
+    <div class="about-desc" id="aboutDescEl">Мы — современный маркетплейс, где тысячи товаров ждут вас по лучшим ценам. Быстрая доставка, честные продавцы и удобный интерфейс.</div>
+    <div class="about-social-title">Мы в социальных сетях</div>
+    <div class="about-socials">
+      <a class="social-btn instagram" id="socialInstagram" href="#" target="_blank">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        Instagram
+      </a>
+      <a class="social-btn telegram" id="socialTelegram" href="#" target="_blank">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Telegram
+      </a>
+      <a class="social-btn whatsapp" id="socialWhatsapp" href="#" target="_blank">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+    </div>
+    <div class="about-contacts" id="aboutContactsEl"></div>
+    <div class="about-stats">
+      <div class="about-stat"><div class="about-stat-num" id="statProducts">0</div><div class="about-stat-label">Товаров</div></div>
+      <div class="about-stat"><div class="about-stat-num" id="statSellers">0</div><div class="about-stat-label">Продавцов</div></div>
+      <div class="about-stat"><div class="about-stat-num" id="statOrders">0</div><div class="about-stat-label">Заказов</div></div>
     </div>
   </div>
 
@@ -1185,6 +1191,7 @@ body, .main, .header, .bottom-nav {
         <button class="form-btn" onclick="openModal('modalAddBanner')">＋ Добавить баннер</button>
       </div>
       <div class="admin-section" id="tabSettings">
+        <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--primary-light)">🔐 Учётные данные</div>
         <div class="form-group">
           <label class="form-label">Логин администратора</label>
           <input class="form-input" id="adminLoginInput" placeholder="Текущий логин">
@@ -1193,7 +1200,28 @@ body, .main, .header, .bottom-nav {
           <label class="form-label">Новый пароль</label>
           <input class="form-input" type="password" id="adminPassInput" placeholder="Новый пароль">
         </div>
-        <button class="form-btn" onclick="saveAdminSettings()">Сохранить</button>
+        <button class="form-btn" onclick="saveAdminSettings()">Сохранить учётные данные</button>
+        <div style="height:1px;background:var(--border);margin:20px 0"></div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--primary-light)">📱 Социальные сети</div>
+        <div class="form-group">
+          <label class="form-label">📸 Instagram ссылка</label>
+          <input class="form-input" id="socialInstagramInput" placeholder="https://instagram.com/yourpage">
+        </div>
+        <div class="form-group">
+          <label class="form-label">✈️ Telegram ссылка</label>
+          <input class="form-input" id="socialTelegramInput" placeholder="https://t.me/yourchannel">
+        </div>
+        <div class="form-group">
+          <label class="form-label">💬 WhatsApp ссылка</label>
+          <input class="form-input" id="socialWhatsappInput" placeholder="https://wa.me/992XXXXXXXXX">
+        </div>
+        <div style="height:1px;background:var(--border);margin:16px 0"></div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:var(--primary-light)">ℹ️ О магазине</div>
+        <div class="form-group">
+          <label class="form-label">Описание магазина</label>
+          <textarea class="form-input" id="aboutDescInput" rows="3" placeholder="Расскажите о вашем магазине..."></textarea>
+        </div>
+        <button class="form-btn" onclick="saveSocialSettings()">Сохранить все настройки</button>
       </div>
     </div>
 
@@ -1212,20 +1240,33 @@ body, .main, .header, .bottom-nav {
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <div class="nav-item active" id="navHome" onclick="showPage('pageHome','navHome')">
-    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     Главная
   </div>
+  <div class="nav-item" id="navCatalogBtn" onclick="toggleCatalog()">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Каталог
+  </div>
+  <div class="nav-item" id="navCartBtn" onclick="openCart()">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span class="nav-badge" id="cartBadgeNav" style="display:none">0</span>
+    Корзина
+  </div>
   <div class="nav-item" id="navFav" onclick="showPage('pageFavorites','navFav')">
-    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
     Избранное
   </div>
   <div class="nav-item" id="navChat" onclick="showPage('pageChat','navChat')">
-    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-    Чат
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
     <span class="nav-badge" id="chatBadge" style="display:none">!</span>
+    Чат
+  </div>
+  <div class="nav-item" id="navAbout" onclick="showPage('pageAbout','navAbout')">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    О нас
   </div>
   <div class="nav-item" id="navProfile" onclick="showPage('pageProfile','navProfile')">
-    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     Профиль
   </div>
 </nav>
@@ -1886,9 +1927,12 @@ function saveCart() { localStorage.setItem('hm_cart', JSON.stringify(window.appS
 
 function updateCartBadge() {
   const total = Object.values(window.appState.cart).reduce((a,b)=>a+b.qty,0);
+  // Header badge (legacy, may not exist)
   const badge = document.getElementById('cartBadge');
-  badge.textContent = total;
-  badge.style.display = total > 0 ? 'flex' : 'none';
+  if (badge) { badge.textContent = total; badge.style.display = total > 0 ? 'flex' : 'none'; }
+  // Bottom nav badge
+  const navBadge = document.getElementById('cartBadgeNav');
+  if (navBadge) { navBadge.textContent = total; navBadge.style.display = total > 0 ? 'flex' : 'none'; }
 }
 
 function refreshProductCards() {
@@ -2032,27 +2076,74 @@ function loadCatalogs() {
 }
 
 function renderCatalogDropdown() {
-  const grid = document.getElementById('catalogGrid');
+  const sidebar = document.getElementById('catalogSidebar');
+  const subcatChips = document.getElementById('subcatChips');
   const cats = window.appState.catalogs;
   const roots = Object.entries(cats).filter(([,c])=>!c.parentId);
-  if (!roots.length) { grid.innerHTML = '<div style="color:var(--text3);font-size:13px">Каталоги не добавлены</div>'; return; }
-  grid.innerHTML = roots.map(([id,cat]) => {
-    const subs = Object.entries(cats).filter(([,c])=>c.parentId===id);
-    return `<div style="width:100%">
-      <div class="cat-item" onclick="filterByCatalog('${id}')">
-        <span>${cat.emoji||'📁'}</span>${cat.name}
-      </div>
-      ${subs.length ? `<div class="subcat-list">${subs.map(([sid,sc])=>`<span class="subcat-item" onclick="filterByCatalog('${sid}')">${sc.emoji||'•'} ${sc.name}</span>`).join('')}</div>` : ''}
-    </div>`;
-  }).join('');
+  if (!roots.length) {
+    sidebar.innerHTML = '<div style="padding:14px;color:var(--text3);font-size:12px">Нет каталогов</div>';
+    subcatChips.innerHTML = '<div style="color:var(--text3);font-size:13px">Каталоги не добавлены</div>';
+    return;
+  }
+  sidebar.innerHTML = '<div style="padding:10px 14px;font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:1px">Разделы</div>' +
+    roots.map(([id,cat]) => `
+      <div class="catalog-cat-tab" id="catTab_${id}" onclick="selectCatalogCat('${id}')">
+        <span class="cat-emoji">${cat.emoji||'📁'}</span>
+        <span>${cat.name}</span>
+      </div>`).join('');
+  // Select first by default
+  if (roots.length > 0) selectCatalogCat(roots[0][0]);
 }
 
+window.selectCatalogCat = function(catId) {
+  document.querySelectorAll('.catalog-cat-tab').forEach(t=>t.classList.remove('active'));
+  const tab = document.getElementById('catTab_'+catId);
+  if (tab) tab.classList.add('active');
+  const cats = window.appState.catalogs;
+  const cat = cats[catId];
+  if (!cat) return;
+  const subs = Object.entries(cats).filter(([,c])=>c.parentId===catId);
+  const panel = document.getElementById('catalogSubcats');
+  const heading = cat.emoji ? `${cat.emoji} ${cat.name}` : cat.name;
+  panel.querySelector('h3') && (panel.querySelector('h3').textContent = heading);
+  const chips = document.getElementById('subcatChips');
+  chips.innerHTML = `<div class="subcat-chip" onclick="filterByCatalog('${catId}')">📂 Все в разделе</div>` +
+    subs.map(([sid,sc])=>`<div class="subcat-chip" onclick="filterByCatalog('${sid}')">${sc.emoji||'•'} ${sc.name}</div>`).join('');
+  // Update heading
+  if (!panel.querySelector('h3')) {
+    const h = document.createElement('h3');
+    h.textContent = heading;
+    panel.insertBefore(h, panel.querySelector('.subcat-chips') || chips);
+  } else {
+    panel.querySelector('h3').textContent = heading;
+  }
+};
+
+window.filterCatalogSearch = function(query) {
+  if (!query.trim()) { renderCatalogDropdown(); return; }
+  const cats = window.appState.catalogs;
+  const chips = document.getElementById('subcatChips');
+  const results = Object.entries(cats).filter(([,c])=>
+    c.name.toLowerCase().includes(query.toLowerCase())
+  );
+  chips.innerHTML = results.length
+    ? results.map(([id,c])=>`<div class="subcat-chip" onclick="filterByCatalog('${id}')">${c.emoji||'📁'} ${c.name}</div>`).join('')
+    : '<div style="color:var(--text3);font-size:13px">Ничего не найдено</div>';
+};
+
 window.filterByCatalog = function(catId) {
-  toggleCatalog();
+  document.getElementById('catalogDropdown').classList.remove('open');
+  if (!catId) {
+    renderProducts(Object.entries(window.appState.products));
+    showPage('pageHome','navHome');
+    showToast('Все товары');
+    return;
+  }
   const entries = Object.entries(window.appState.products).filter(([,p]) =>
     p.catalog === catId || p.subcatalog === catId
   );
   renderProducts(entries);
+  showPage('pageHome','navHome');
   showToast('Фильтр применён');
 };
 
@@ -2381,8 +2472,64 @@ window.saveAdminSettings = async function() {
   if (!login) { showToast('Введите логин','error'); return; }
   const creds = { login, password: pass || '12345' };
   await set(ref(db, 'admin_credentials'), creds);
-  showToast('Настройки сохранены');
+  showToast('Учётные данные сохранены');
 };
+
+window.saveSocialSettings = async function() {
+  const instagram = document.getElementById('socialInstagramInput').value.trim();
+  const telegram = document.getElementById('socialTelegramInput').value.trim();
+  const whatsapp = document.getElementById('socialWhatsappInput').value.trim();
+  const desc = document.getElementById('aboutDescInput').value.trim();
+  await set(ref(db, 'site_settings'), { instagram, telegram, whatsapp, description: desc });
+  // Update admin credentials too
+  const login = document.getElementById('adminLoginInput').value.trim();
+  const pass = document.getElementById('adminPassInput').value.trim();
+  if (login) await set(ref(db, 'admin_credentials'), { login, password: pass || '12345' });
+  showToast('Все настройки сохранены ✅');
+  loadSocialSettings();
+};
+
+function loadSocialSettings() {
+  get(ref(db, 'site_settings')).then(snap => {
+    if (!snap.exists()) return;
+    const s = snap.val();
+    // Update About page
+    const ig = document.getElementById('socialInstagram');
+    const tg = document.getElementById('socialTelegram');
+    const wa = document.getElementById('socialWhatsapp');
+    const desc = document.getElementById('aboutDescEl');
+    if (ig && s.instagram) ig.href = s.instagram;
+    if (tg && s.telegram) tg.href = s.telegram;
+    if (wa && s.whatsapp) wa.href = s.whatsapp;
+    if (desc && s.description) desc.textContent = s.description;
+    // Prefill admin inputs
+    const igIn = document.getElementById('socialInstagramInput');
+    const tgIn = document.getElementById('socialTelegramInput');
+    const waIn = document.getElementById('socialWhatsappInput');
+    const descIn = document.getElementById('aboutDescInput');
+    if (igIn) igIn.value = s.instagram || '';
+    if (tgIn) tgIn.value = s.telegram || '';
+    if (waIn) waIn.value = s.whatsapp || '';
+    if (descIn) descIn.value = s.description || '';
+  });
+}
+
+function updateAboutStats() {
+  const prodCount = Object.keys(window.appState.products).length;
+  const el = document.getElementById('statProducts');
+  if (el) el.textContent = prodCount;
+  get(ref(db, 'users')).then(snap => {
+    if (!snap.exists()) return;
+    const users = snap.val();
+    const sellers = Object.values(users).filter(u=>u.role==='seller').length;
+    const sellerEl = document.getElementById('statSellers');
+    if (sellerEl) sellerEl.textContent = sellers;
+  });
+  get(ref(db, 'orders')).then(snap => {
+    const ordersEl = document.getElementById('statOrders');
+    if (ordersEl) ordersEl.textContent = snap.exists() ? Object.keys(snap.val()).length : 0;
+  });
+}
 
 // ===== BOT SETTINGS =====
 function prefillBotSettings() {
@@ -2645,11 +2792,16 @@ document.addEventListener('click', e => {
 window.showPage = function(pageId, navId) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById(pageId).classList.add('active');
-  document.getElementById(navId).classList.add('active');
+  const page = document.getElementById(pageId);
+  const nav = document.getElementById(navId);
+  if (page) page.classList.add('active');
+  if (nav) nav.classList.add('active');
   if (pageId === 'pageFavorites') renderFavorites();
   if (pageId === 'pageProfile') updateProfileUI();
   if (pageId === 'pageChat') loadChats();
+  if (pageId === 'pageAbout') { loadSocialSettings(); updateAboutStats(); }
+  // Close catalog if open
+  document.getElementById('catalogDropdown').classList.remove('open');
 };
 
 // ===== THEME =====
@@ -2705,7 +2857,12 @@ window.requestNotifications = async function() {
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   window.appState.deferredInstallPrompt = e;
-  document.getElementById('pwaInstallBtn').style.display = '';
+  // Show banner after 3 seconds
+  setTimeout(() => {
+    const banner = document.getElementById('pwaBanner');
+    if (banner) banner.classList.add('show');
+  }, 3000);
+  document.getElementById('pwaInstallBtn').style.display = 'flex';
 });
 
 window.installPWA = async function() {
@@ -2713,6 +2870,7 @@ window.installPWA = async function() {
   if (!prompt) return;
   prompt.prompt();
   const { outcome } = await prompt.userChoice;
+  document.getElementById('pwaBanner').classList.remove('show');
   if (outcome === 'accepted') showToast('Приложение устанавливается! 📲');
 };
 
@@ -2721,12 +2879,14 @@ function init() {
   // Restore theme
   const savedTheme = localStorage.getItem('hm_theme');
   if (savedTheme) { document.body.dataset.theme = savedTheme; }
+  else { document.body.dataset.theme = 'dark'; }
 
   updateProfileUI();
   updateCartBadge();
   loadCatalogs();
   loadProducts();
   loadBanners();
+  loadSocialSettings();
   if (window.appState.currentUser) loadChats();
 }
 
